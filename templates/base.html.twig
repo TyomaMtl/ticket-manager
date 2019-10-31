@@ -8,8 +8,14 @@
     <body>
         <nav>
             <ul>
-                <li><a href="">S'inscrire</a></li>
-                <li><a href="">Se connecter</a></li>
+                {% if not app.user %}
+                    <li><a href="{{ path('register') }}">S'inscrire</a></li>
+                    <li><a href="{{ path('login') }}">Se connecter</a></li>
+                {% else %}
+                    <li><a href="{{ path('profile') }}">{{ app.user.firstname }} {{ app.user.lastname }}</a></li>
+                    <li><a href="{{ path('ticket') }}">Soumettre un ticket</a></li>
+                    <li><a href="{{ path('logout') }}">Se deconnecter</a></li>
+                {% endif %}
             </ul>
         </nav>
         {% block body %}{% endblock %}
