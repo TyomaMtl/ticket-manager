@@ -72,7 +72,7 @@ class TicketController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('ticket_index');
+            return $this->redirectToRoute('ticket');
         }
 
         return $this->render('ticket/edit.html.twig', [
@@ -92,6 +92,6 @@ class TicketController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('ticket_index');
+        return $this->redirectToRoute('ticket');
     }
 }
