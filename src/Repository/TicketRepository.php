@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Ticket;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -19,6 +20,16 @@ class TicketRepository extends ServiceEntityRepository
         parent::__construct($registry, Ticket::class);
     }
 
+    public function findAllByUser(User $user) 
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.user = :user')
+            ->setParameter('user', $user->getId())
+            ->orderBy('t.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     // /**
     //  * @return Ticket[] Returns an array of Ticket objects
     //  */

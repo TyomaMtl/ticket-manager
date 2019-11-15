@@ -19,10 +19,10 @@ class TicketController extends AbstractController
     /**
      * @Route("/", name="ticket", methods={"GET"})
      */
-    public function index(TicketRepository $ticketRepository): Response
+    public function index(TicketRepository $ticketRepository, Security $security): Response
     {
         return $this->render('ticket/index.html.twig', [
-            'tickets' => $ticketRepository->findAll(),
+            'tickets' => $ticketRepository->findAllByUser($security->getUser()),
         ]);
     }
 
