@@ -21,9 +21,20 @@ class TicketController extends AbstractController
      */
     public function index(TicketRepository $ticketRepository, Security $security): Response
     {
-        return $this->render('ticket/index.html.twig', [
-            'tickets' => $ticketRepository->findAllByUser($security->getUser()),
-        ]);
+        $roles = $security->getUser()->getRoles();
+
+        if(in_array("ROLE_ADMIN", $roles))
+        {
+            return $this->render('ticket/index.html.twig', [
+                'tickets' => $ticketRepository->findAllByUser($security->getUser()),
+            ]);
+        }
+        else
+        {
+            return $this->render('ticket/index.html.twig', [
+                'error' => 'Vous ne pouvez pas accéder à cette ressource'
+            ]);
+        }
     }
 
     /**
