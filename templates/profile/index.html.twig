@@ -3,7 +3,13 @@
 {% block title %}Profile{% endblock %}
 
 {% block body %}
-    <h1>Ticket index</h1>
+    <h1>My tickets</h1>
+
+    {% for role in app.user.roles %}
+        {% if role == 'ROLE_ADMIN' %}
+            <a href="{{ path('ticket' )}}">Show all users tickets</a>
+        {% endif %}
+    {% endfor %}
 
     <table class="table">
         <thead>
