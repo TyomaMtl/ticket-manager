@@ -26,7 +26,7 @@ class TicketController extends AbstractController
         if(in_array("ROLE_ADMIN", $roles))
         {
             return $this->render('ticket/index.html.twig', [
-                'tickets' => $ticketRepository->findAllByUser($security->getUser()),
+                'tickets' => $ticketRepository->findAll(),
             ]);
         }
         else
