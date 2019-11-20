@@ -16,14 +16,19 @@ use Symfony\Component\Security\Core\Security;
  */
 class TicketController extends AbstractController
 {
+    private $user;
+
+    public function __construct(Security $security) 
+    {
+        $this->user = $security->getUser();
+    }
+
     /**
      * @Route("/", name="ticket", methods={"GET"})
      */
-    public function index(TicketRepository $ticketRepository, Security $security): Response
+    public function index(TicketRepository $ticketRepository): Response
     {
-        $roles = $security->getUser()->getRoles();
-
-        if(in_array("ROLE_ADMIN", $roles))
+        if(in_array('ROLE_ADMIN', $this->user->getRoles()))
         {
             return $this->render('ticket/index.html.twig', [
                 'tickets' => $ticketRepository->findAll(),
@@ -40,12 +45,12 @@ class TicketController extends AbstractController
     /**
      * @Route("/new", name="ticket_new", methods={"GET","POST"})
      */
-    public function new(Request $request, Security $security): Response
+    public function new(Request $request): Response
     {
         $ticket = new Ticket();
         $form = $this->createForm(TicketType::class, $ticket);
         $form->handleRequest($request);
-        $ticket->setUser($security->getUser());
+        $ticket->setUser($this->user);
         $ticket->setCreatedAt();
 
         if ($form->isSubmitted() && $form->isValid()) 
@@ -68,9 +73,18 @@ class TicketController extends AbstractController
      */
     public function show(Ticket $ticket): Response
     {
-        return $this->render('ticket/show.html.twig', [
-            'ticket' => $ticket,
-        ]);
+        if(in_array('ROLE_ADMIN', $this->user->getRoles()) || $this->user == $ticket->getUser())
+        {
+            return $this->render('ticket/show.html.twig', [
+                'ticket' => $ticket,
+            ]);
+        }
+        else
+        {
+            return $this->render('ticket/index.html.twig', [
+                'error' => 'Vous ne pouvez pas accéder à cette ressource'
+            ]);
+        }
     }
 
     /**
@@ -78,19 +92,28 @@ class TicketController extends AbstractController
      */
     public function edit(Request $request, Ticket $ticket): Response
     {
-        $form = $this->createForm(TicketType::class, $ticket);
-        $form->handleRequest($request);
+        if($this->user == $ticket->getUser())
+        {
+            $form = $this->createForm(TicketType::class, $ticket);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            if ($form->isSubmitted() && $form->isValid()) 
+            {
+                $this->getDoctrine()->getManager()->flush();
+                return $this->redirectToRoute('ticket');
+            }
 
-            return $this->redirectToRoute('ticket');
+            return $this->render('ticket/edit.html.twig', [
+                'ticket' => $ticket,
+                'form' => $form->createView(),
+            ]);
         }
-
-        return $this->render('ticket/edit.html.twig', [
-            'ticket' => $ticket,
-            'form' => $form->createView(),
-        ]);
+        else
+        {
+            return $this->render('ticket/index.html.twig', [
+                'error' => 'Vous ne pouvez pas accéder à cette ressource'
+            ]);
+        }
     }
 
     /**
@@ -98,12 +121,20 @@ class TicketController extends AbstractController
      */
     public function delete(Request $request, Ticket $ticket): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$ticket->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($ticket);
-            $entityManager->flush();
+        if(in_array('ROLE_ADMIN', $this->user->getRoles()) || $this->user == $ticket->getUser())
+        {
+            if ($this->isCsrfTokenValid('delete'.$ticket->getId(), $request->request->get('_token'))) 
+            {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($ticket);
+                $entityManager->flush();
+            }
+    
+            return $this->redirectToRoute('ticket');
         }
-
-        return $this->redirectToRoute('ticket');
+        else
+        {
+            return $this->redirectToRoute('ticket');
+        }
     }
 }
