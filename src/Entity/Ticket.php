@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use \DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +32,11 @@ class Ticket
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
 
     public function getId(): ?int
     {
@@ -69,6 +75,18 @@ class Ticket
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(): self
+    {
+        $this->created_at = new \DateTime();
 
         return $this;
     }
