@@ -7,20 +7,23 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
     <body>
-        <nav class="navbar">
-            <p>Ticket Manager</p>
+        <nav class="navbar bg-dark">
+            <a class="navbar-brand text-light" href="#">Ticket Manager</a>
             <ul class="nav">
                 {% if not app.user %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('register') }}">S'inscrire</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('login') }}">Se connecter</a></li>
+                    <li style="margin-right: 5px;" class="nav-item"><a class="btn btn-dark" href="{{ path('login') }}">Login</a></li>
+                    <li class="nav-item"><a class="btn btn-info" href="{{ path('register') }}">Register</a></li>
                 {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('profile') }}">{{ app.user.firstname }} {{ app.user.lastname }}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('ticket_new') }}">Soumettre un ticket</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('logout') }}">Se deconnecter</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{{ path('profile') }}">{{ app.user.firstname }} {{ app.user.lastname }}</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{{ path('ticket_new') }}">Add ticket</a></li>
+                    <li style="margin-left: 10px" class="nav-item"><a class="btn btn-info" href="{{ path('logout') }}">Logout</a></li>
                 {% endif %}
             </ul>
         </nav>
-        {% block body %}{% endblock %}
+        <br>
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
         {% block javascripts %}{% endblock %}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
