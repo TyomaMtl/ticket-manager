@@ -1,0 +1,6 @@
+{{ form_start(form) }}
+    <div class="form-group">
+        {{ form_widget(form.message, {'attr': {'class': 'form-control', 'placeholder': 'Message'}}) }}
+    </div>
+    <button class="btn btn-info">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

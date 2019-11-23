@@ -3,8 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Ticket;
+use App\Entity\Message;
+
 use App\Form\TicketType;
+use App\Form\MessageType;
+
 use App\Repository\TicketRepository;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +53,7 @@ class TicketController extends AbstractController
     public function new(Request $request): Response
     {
         $ticket = new Ticket();
+
         $form = $this->createForm(TicketType::class, $ticket);
         $form->handleRequest($request);
         $ticket->setUser($this->user);
@@ -71,12 +77,27 @@ class TicketController extends AbstractController
     /**
      * @Route("/{id}", name="ticket_show", methods={"GET"})
      */
-    public function show(Ticket $ticket): Response
+    public function show(Ticket $ticket, Request $request): Response
     {
         if(in_array('ROLE_ADMIN', $this->user->getRoles()) || $this->user == $ticket->getUser())
         {
+            $message = new Message();
+
+            $form = $this->createForm(MessageType::class, $message);
+            $form->handleRequest($request);
+            $message->setUser($this->user);
+            $message->setTicket($ticket);
+
+            if($form->isSubmitted() && $form->isValid())
+            {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($message);
+                $entityManager->flush();
+            }
+
             return $this->render('ticket/show.html.twig', [
                 'ticket' => $ticket,
+                'form' => $form->createView()
             ]);
         }
         else
