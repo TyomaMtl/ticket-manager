@@ -28,7 +28,13 @@
         </tbody>
     </table>
 
-    {{ include('ticket/_message_form.html.twig') }}
+    {% for message in ticket.messages %}
+        <p>{{ message.user.firstname }} {{ message.user.lastname }}</p>
+        <p>{{ message.message }}</p>
+        <hr>
+    {% endfor %}
+
+    {{ include('message/_message_form.html.twig') }}
 
     {{ include('ticket/_delete_form.html.twig') }}
 
