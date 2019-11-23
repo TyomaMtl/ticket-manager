@@ -7,7 +7,7 @@
     
     <a class="btn btn-info" href="{{ path('ticket') }}">Back to list</a>
 
-    {% if app.user == ticket.user %}
+    {% if is_granted('ROLE_ADMIN') %}
         <a class="btn btn-info" href="{{ path('ticket_edit', {'id': ticket.id}) }}">Edit</a>
     {% endif %}
     
