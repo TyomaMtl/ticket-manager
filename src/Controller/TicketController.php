@@ -92,7 +92,7 @@ class TicketController extends AbstractController
      */
     public function edit(Request $request, Ticket $ticket): Response
     {
-        if($this->user == $ticket->getUser())
+        if(in_array('ROLE_ADMIN', $this->user->getRoles()))
         {
             $form = $this->createForm(TicketType::class, $ticket);
             $form->handleRequest($request);
@@ -121,7 +121,7 @@ class TicketController extends AbstractController
      */
     public function delete(Request $request, Ticket $ticket): Response
     {
-        if(in_array('ROLE_ADMIN', $this->user->getRoles()) || $this->user == $ticket->getUser())
+        if(in_array('ROLE_ADMIN', $this->user->getRoles()))
         {
             if ($this->isCsrfTokenValid('delete'.$ticket->getId(), $request->request->get('_token'))) 
             {
