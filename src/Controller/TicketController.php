@@ -75,7 +75,7 @@ class TicketController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="ticket_show", methods={"GET"})
+     * @Route("/{id}", name="ticket_show", methods={"GET", "POST"})
      */
     public function show(Ticket $ticket, Request $request): Response
     {
@@ -93,6 +93,8 @@ class TicketController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($message);
                 $entityManager->flush();
+
+                return $this->redirect($request->getRequestUri());
             }
 
             return $this->render('ticket/show.html.twig', [
