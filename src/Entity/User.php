@@ -57,9 +57,15 @@ class User implements UserInterface
      */
     private $tickets;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", inversedBy="user", cascade={"persist", "merge"})
+     */
+    private $adminTickets;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
+        $this->adminTickets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -197,6 +203,32 @@ class User implements UserInterface
             if ($ticket->getUser() === $this) {
                 $ticket->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ticket[]
+     */
+    public function getAdminTickets(): Collection
+    {
+        return $this->adminTickets;
+    }
+
+    public function addAdminTicket(Ticket $adminTicket): self
+    {
+        if (!$this->adminTickets->contains($adminTicket)) {
+            $this->adminTickets[] = $adminTicket;
+        }
+
+        return $this;
+    }
+
+    public function removeAdminTicket(Ticket $adminTicket): self
+    {
+        if ($this->adminTickets->contains($adminTicket)) {
+            $this->adminTickets->removeElement($adminTicket);
         }
 
         return $this;

@@ -45,9 +45,19 @@ class Ticket
      */
     private $messages;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="ticket", cascade={"persist", "merge"})
+     * @ORM\JoinTable(name="moderation",
+     *  joinColumns={@ORM\JoinColumn(name="ticket_id", referencedColumnName="id")},
+     *  inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     * )
+     */
+    private $adminUsers;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
+        $this->adminUsers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,6 +139,32 @@ class Ticket
             if ($message->getTicket() === $this) {
                 $message->setTicket(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getAdminUsers(): Collection
+    {
+        return $this->adminUsers;
+    }
+
+    public function addAdminUser(User $adminUser): self
+    {
+        if (!$this->adminUsers->contains($adminUser)) {
+            $this->adminUsers[] = $adminUser;
+        }
+
+        return $this;
+    }
+
+    public function removeAdminUser(User $adminUser): self
+    {
+        if ($this->adminUsers->contains($adminUser)) {
+            $this->adminUsers->removeElement($adminUser);
         }
 
         return $this;
