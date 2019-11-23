@@ -31,11 +31,16 @@
     {% for message in ticket.messages %}
         <p>{{ message.user.firstname }} {{ message.user.lastname }}</p>
         <p>{{ message.message }}</p>
+        {% if is_granted('ROLE_ADMIN') %}
+            {{ include('message/_delete_message_form.html.twig') }}
+        {% endif %}
         <hr>
     {% endfor %}
 
     {{ include('message/_message_form.html.twig') }}
 
-    {{ include('ticket/_delete_form.html.twig') }}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ include('ticket/_delete_form.html.twig') }}
+    {% endif %}
 
 {% endblock %}

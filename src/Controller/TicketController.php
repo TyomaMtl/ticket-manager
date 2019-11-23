@@ -155,9 +155,5 @@ class TicketController extends AbstractController
     
             return $this->redirectToRoute('ticket');
         }
-        else
-        {
-            return $this->redirectToRoute('ticket');
-        }
     }
 }
