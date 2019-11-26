@@ -42,5 +42,34 @@
         </tbody>
     </table>
 
+    <h1>Administor ticket</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ticket in admin_tickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.title }}</td>
+                <td>{{ ticket.content }}</td>
+                <td>
+                    <a href="{{ path('ticket_show', {'id': ticket.id}) }}">show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
     <a href="{{ path('ticket_new') }}">Create new</a>
 {% endblock %}
