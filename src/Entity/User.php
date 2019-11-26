@@ -220,7 +220,7 @@ class User implements UserInterface
     {
         if (!$this->adminTickets->contains($adminTicket)) {
             $this->adminTickets[] = $adminTicket;
-            $adminTicket->addModeration($this);
+            $adminTicket->addModerator($this);
         }
 
         return $this;
@@ -230,7 +230,7 @@ class User implements UserInterface
     {
         if ($this->adminTickets->contains($adminTicket)) {
             $this->adminTickets->removeElement($adminTicket);
-            $adminTicket->removeModeration($this);
+            $adminTicket->removeModerator($this);
         }
 
         return $this;
