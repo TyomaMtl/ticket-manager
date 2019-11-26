@@ -46,18 +46,15 @@ class Ticket
     private $messages;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="ticket", cascade={"persist", "merge"})
-     * @ORM\JoinTable(name="moderation",
-     *  joinColumns={@ORM\JoinColumn(name="ticket_id", referencedColumnName="id")},
-     *  inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
-     * )
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="adminTickets")
      */
-    private $adminUsers;
+    private $moderator;
 
     public function __construct()
     {
         $this->messages = new ArrayCollection();
         $this->adminUsers = new ArrayCollection();
+        $this->moderator = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,24 +144,24 @@ class Ticket
     /**
      * @return Collection|User[]
      */
-    public function getAdminUsers(): Collection
+    public function getModerator(): Collection
     {
-        return $this->adminUsers;
+        return $this->moderator;
     }
 
-    public function addAdminUser(User $adminUser): self
+    public function addModerator(User $moderator): self
     {
-        if (!$this->adminUsers->contains($adminUser)) {
-            $this->adminUsers[] = $adminUser;
+        if (!$this->moderator->contains($moderator)) {
+            $this->moderator[] = $moderator;
         }
 
         return $this;
     }
 
-    public function removeAdminUser(User $adminUser): self
+    public function removeModerator(User $moderator): self
     {
-        if ($this->adminUsers->contains($adminUser)) {
-            $this->adminUsers->removeElement($adminUser);
+        if ($this->moderator->contains($moderator)) {
+            $this->moderator->removeElement($moderator);
         }
 
         return $this;

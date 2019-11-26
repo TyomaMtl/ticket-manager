@@ -58,7 +58,7 @@ class User implements UserInterface
     private $tickets;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", inversedBy="user", cascade={"persist", "merge"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", mappedBy="moderation")
      */
     private $adminTickets;
 
@@ -220,6 +220,7 @@ class User implements UserInterface
     {
         if (!$this->adminTickets->contains($adminTicket)) {
             $this->adminTickets[] = $adminTicket;
+            $adminTicket->addModeration($this);
         }
 
         return $this;
@@ -229,6 +230,7 @@ class User implements UserInterface
     {
         if ($this->adminTickets->contains($adminTicket)) {
             $this->adminTickets->removeElement($adminTicket);
+            $adminTicket->removeModeration($this);
         }
 
         return $this;
