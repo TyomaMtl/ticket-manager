@@ -4,8 +4,8 @@
 
 {% block body %}
     <h1>Create new Ticket</h1>
+    
+    <p><a href="{{ path('ticket') }}">Back to list</a></p>
 
     {{ include('ticket/_form.html.twig') }}
-
-    <a href="{{ path('ticket') }}">back to list</a>
 {% endblock %}

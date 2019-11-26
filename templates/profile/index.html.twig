@@ -7,7 +7,7 @@
 
     {% for role in app.user.roles %}
         {% if role == 'ROLE_ADMIN' %}
-            <a href="{{ path('ticket' )}}">Show all users tickets</a>
+            <p><a href="{{ path('ticket' )}}">Show all users tickets</a></p>
         {% endif %}
     {% endfor %}
 
@@ -71,5 +71,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('ticket_new') }}">Create new</a>
+    <a class="btn btn-info" href="{{ path('ticket_new') }}">Create new</a>
 {% endblock %}

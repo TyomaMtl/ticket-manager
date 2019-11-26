@@ -3,45 +3,49 @@
 {% block title %}Ticket{% endblock %}
 
 {% block body %}
-    <h1>Ticket</h1>
-    
-    <a class="btn btn-info" href="{{ path('ticket') }}">Back to list</a>
 
-    {% if is_granted('ROLE_ADMIN') %}
-        <a class="btn btn-info" href="{{ path('ticket_edit', {'id': ticket.id}) }}">Edit</a>
-    {% endif %}
+    <h1>{{ ticket.title }}</h1>
     
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ ticket.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ ticket.title }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ ticket.content }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <p>
+        <a class="btn btn-info" href="{{ path('ticket') }}">Back to list</a>
 
-    {% for message in ticket.messages %}
-        <p>{{ message.user.firstname }} {{ message.user.lastname }}</p>
-        <p>{{ message.message }}</p>
         {% if is_granted('ROLE_ADMIN') %}
-            {{ include('message/_delete_message_form.html.twig') }}
+            <a class="btn btn-info" href="{{ path('ticket_edit', {'id': ticket.id}) }}">Edit</a>
         {% endif %}
-        <hr>
-    {% endfor %}
+    </p>
+    
+    <h3>Question :</h3>
+    <p>{{ ticket.content }}</p>
+    
+    <div class="row">
+        <div class="col-xl-10">
 
-    {{ include('message/_message_form.html.twig') }}
+            <h3>Messages :</h3>
 
-    {% if is_granted('ROLE_ADMIN') %}
-        {{ include('ticket/_moderator_form.html.twig') }}
-        {{ include('ticket/_delete_form.html.twig') }}
-    {% endif %}
+            {% for message in ticket.messages %}
+                <p><div class="card">
+                    <div class="d-flex justify-content-between card-header">
+                        {{ message.user.firstname }} {{ message.user.lastname }}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            {{ include('message/_delete_message_form.html.twig') }}
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p>{{ message.message }}</p>
+                            <footer class="blockquote-footer">Send <cite title="Source Title">Source Title</cite></footer>
+                        </blockquote>
+                    </div>
+                </div></p>
+            {% endfor %}
+            <p>{{ include('message/_message_form.html.twig') }}</p> 
+        </div>
+        <div class="col-sm-2">
+            {% if is_granted('ROLE_ADMIN') %}
+                <p>{{ include('ticket/_moderator_form.html.twig') }}</p>
+                <p>{{ include('ticket/_delete_form.html.twig') }}</p>
+            {% endif %}
+        </div>
+    </div>
 
 {% endblock %}

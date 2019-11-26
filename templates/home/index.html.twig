@@ -3,7 +3,9 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-<div>
-    <h1>Salut ! Ça va ?</h1>
-</div>
+    <div class="jumbotron">
+        <h1>Ticket manager</h1>
+        <p>Ticket manager manage you to manage your tickets</p>
+        <a class="btn btn-info btn-lg" href="{{ path('register') }}" role="button">Create account</a>
+    </div>
 {% endblock %}
