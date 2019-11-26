@@ -40,6 +40,7 @@
     {{ include('message/_message_form.html.twig') }}
 
     {% if is_granted('ROLE_ADMIN') %}
+        {{ include('ticket/_moderator_form.html.twig') }}
         {{ include('ticket/_delete_form.html.twig') }}
     {% endif %}
 

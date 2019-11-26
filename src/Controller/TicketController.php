@@ -7,6 +7,7 @@ use App\Entity\Message;
 
 use App\Form\TicketType;
 use App\Form\MessageType;
+use App\Form\ModeratorType;
 
 use App\Repository\TicketRepository;
 
@@ -83,12 +84,15 @@ class TicketController extends AbstractController
         {
             $message = new Message();
 
-            $form = $this->createForm(MessageType::class, $message);
-            $form->handleRequest($request);
+            $formMessage = $this->createForm(MessageType::class, $message);
+            $formMessage->handleRequest($request);
             $message->setUser($this->user);
             $message->setTicket($ticket);
 
-            if($form->isSubmitted() && $form->isValid())
+            $formModerator = $this->createForm(ModeratorType::class, $ticket);
+            $formModerator->handleRequest($request);
+
+            if($formMessage->isSubmitted() && $formMessage->isValid())
             {
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($message);
@@ -97,9 +101,19 @@ class TicketController extends AbstractController
                 return $this->redirect($request->getRequestUri());
             }
 
+            if($formModerator->isSubmitted() && $formModerator->isValid())
+            {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($ticket);
+                $entityManager->flush();
+
+                return $this->redirect($request->getRequestUri());
+            }
+
             return $this->render('ticket/show.html.twig', [
                 'ticket' => $ticket,
-                'form' => $form->createView()
+                'form_message' => $formMessage->createView(),
+                'form_moderator' => $formModerator->createView()
             ]);
         }
         else
