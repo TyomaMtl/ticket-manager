@@ -58,7 +58,7 @@ class User implements UserInterface
     private $tickets;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", mappedBy="moderation")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Ticket", mappedBy="moderator")
      */
     private $adminTickets;
 
