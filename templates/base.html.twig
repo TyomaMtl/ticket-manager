@@ -8,7 +8,7 @@
     </head>
     <body>
         <nav class="navbar bg-dark">
-            <a class="navbar-brand text-light" href="#">Ticket Manager</a>
+            <a class="navbar-brand text-light" href="{{ path('home') }}">Ticket Manager</a>
             <ul class="nav">
                 {% if not app.user %}
                     <li style="margin-right: 5px;" class="nav-item"><a class="btn btn-dark" href="{{ path('login') }}">Login</a></li>
