@@ -80,7 +80,13 @@ class TicketController extends AbstractController
      */
     public function show(Ticket $ticket, Request $request): Response
     {
-        if(in_array('ROLE_ADMIN', $this->user->getRoles()) || $this->user == $ticket->getUser())
+        $moderators = [];
+        foreach($ticket->getModerator() as $moderator)
+        {
+            $moderators[] = $moderator;
+        }
+
+        if(in_array('ROLE_ADMIN', $this->user->getRoles()) || $this->user == $ticket->getUser() || in_array($this->user, $moderators))
         {
             $message = new Message();
 
