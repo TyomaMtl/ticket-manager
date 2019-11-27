@@ -4,8 +4,13 @@
 
 {% block body %}
     <div class="jumbotron">
-        <h1>Ticket manager</h1>
-        <p>Ticket manager manage you to manage your tickets</p>
-        <a class="btn btn-info btn-lg" href="{{ path('register') }}" role="button">Create account</a>
+        {% if app.user %}
+            <h1>Welcome to Ticket manager</h1>
+            <a class="btn btn-info btn-lg" href="{{ path('profile') }}" role="button">Go to profile</a>
+        {% else %}
+            <h1>Ticket manager</h1>
+            <p>Ticket manager manage you to manage your tickets</p>
+            <a class="btn btn-info btn-lg" href="{{ path('register') }}" role="button">Create account</a>
+        {% endif %}
     </div>
 {% endblock %}
